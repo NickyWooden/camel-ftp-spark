@@ -1,0 +1,46 @@
+server:
+  port: 9090
+
+spring:
+  ftp:
+    host: 192.168.1.11
+    port: 21
+    username: ftpuser
+    password: liyuan
+    uploadPath: /output
+    downloadPath: /input
+#camel配置持久运行
+camel:
+  springboot:
+    main-run-controller: true
+#FTP连接配置
+ftp:
+  url: ftp://192.168.1.11:21/data
+  username: ftpuser
+  password: liyuan
+  download:
+    server: ${ftp.url}?username=${ftp.username}&password=${ftp.password}&delay=5s&move=done&readLock=rename
+    local: file:d:/test/ftp
+  upload:
+    local: file:d:/test/ftp/result?delay=10s&move=done&readLock=rename
+    server:  ${ftp.url}/return?username=${ftp.username}&password=${ftp.password}
+#解析下载文件业务配置
+route:
+  processor:
+    input: ${ftp.download.local}?delay=10s&move=done&readLock=rename
+    target: ${ftp.download.local}/done
+
+spark:
+  sparkHome: /home/spark/spark-2.4.4-bin-hadoop2.7
+  jobJar: /home/sino/spark-model-1.0/lib/spark-model-1.0.jar
+  mainMethod: com.sinovatio.spark.JobStarter
+  mainArgs: jobName=idFusion,date=20200103
+  runtime:
+    master: yarn
+    deployMode: cluster
+    yarnQueue: sino
+    cores: 2
+    executorInstances: 2
+    executorMemory: 1g
+    driverMemory: 1g
+
