@@ -9,11 +9,11 @@ spring:
     password: liyuan
     uploadPath: /output
     downloadPath: /input
-#camel配置持久运行
+#camel闅忎富杩涚▼鍚姩鏈嶅姟
 camel:
   springboot:
     main-run-controller: true
-#FTP连接配置
+#FTP鍙傛暟閰嶇疆
 ftp:
   url: ftp://192.168.1.11:21/data
   username: ftpuser
@@ -21,15 +21,18 @@ ftp:
   download:
     server: ${ftp.url}?username=${ftp.username}&password=${ftp.password}&delay=5s&move=done&readLock=rename
     local: file:d:/test/ftp
+    failure: ${ftp.url}/failure?username=${ftp.username}&password=${ftp.password}
   upload:
-    local: file:d:/test/ftp/result?delay=10s&move=done&readLock=rename
+    local: file:d:/test/ftp/spark?delay=10s&move=done&readLock=rename
     server:  ${ftp.url}/return?username=${ftp.username}&password=${ftp.password}
-#解析下载文件业务配置
+    status: d:/test/ftp/status
+    upload-status: file:${ftp.upload.status}?delay=10s&move=done&readLock=rename
+#璺敱閰嶇疆
 route:
   processor:
     input: ${ftp.download.local}?delay=10s&move=done&readLock=rename
     target: ${ftp.download.local}/done
-
+#spark浠诲姟璧勬簮閰嶇疆
 spark:
   sparkHome: /home/spark/spark-2.4.4-bin-hadoop2.7
   jobJar: /home/sino/spark-model-1.0/lib/spark-model-1.0.jar
