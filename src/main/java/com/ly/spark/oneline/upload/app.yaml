@@ -1,0 +1,6 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+upload:
+  dir: d:/test

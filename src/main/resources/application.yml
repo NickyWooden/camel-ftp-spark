@@ -9,10 +9,15 @@ spring:
     password: liyuan
     uploadPath: /output
     downloadPath: /input
+  servlet:
+    multipart:
+      max-file-size: 5MB
+upload:
+  dir: d:/test
 #camel随主进程启动服务
 camel:
   springboot:
-    main-run-controller: true
+    main-run-controller: false
 #FTP参数配置
 ftp:
   url: ftp://192.168.1.11:21/data
